@@ -1,0 +1,104 @@
+# =============================================================================
+# Advanced Security Group Example - Variables
+# =============================================================================
+# This file contains example values for the advanced security group example.
+# Copy this file to terraform.tfvars and modify the values as needed.
+
+# Note: This example uses the default VPC which is automatically discovered.
+# The module variables are configured directly in main.tf for demonstration purposes.
+
+# AWS Region (configured in provider block in main.tf)
+# region = "us-east-1"
+
+# Advanced Security Group Configuration (configured in main.tf)
+# account_name = "prod"
+# project_name = "microservices"
+# use_name_prefix = true  # Creates name with random suffix
+
+# Minimal Security Group Configuration (configured in main.tf)
+# account_name = "dev"
+# project_name = "test"
+
+# CIDR Blocks for different rule types (configured in main.tf)
+# Replace these with your actual network configuration:
+#
+# Predefined rules CIDR:
+# ingress_cidr_blocks = ["10.0.0.0/8"]  # Private network range
+#
+# Custom application ports:
+# custom_app_cidr = ["10.0.1.0/24", "10.0.2.0/24"]  # Private subnets
+# monitoring_cidr = ["10.0.0.0/16"]  # VPC CIDR
+#
+# Database access:
+# database_cidr = ["10.0.100.0/24"]  # Database subnet
+#
+# IPv6 support:
+# ipv6_cidr = ["::/0"]  # All IPv6 (adjust for production)
+
+# =============================================================================
+# Usage Instructions
+# =============================================================================
+# 1. Copy this file: cp terraform.tfvars.example terraform.tfvars
+# 2. Modify main.tf to adjust:
+#    - account_name and project_name values
+#    - CIDR blocks in all ingress/egress rule blocks
+#    - Custom port ranges (8080, 9090-9099, etc.)
+#    - use_name_prefix setting
+# 3. Run: terraform init
+# 4. Run: terraform plan
+# 5. Run: terraform apply
+
+# =============================================================================
+# Features Demonstrated
+# =============================================================================
+# This advanced example demonstrates:
+#
+# 1. Multiple Rule Types:
+#    - Predefined rules (http-80-tcp, https-443-tcp, ssh-tcp)
+#    - Custom CIDR block rules (ports 8080, 9090-9099)
+#    - IPv6 CIDR block rules (HTTPS over IPv6)
+#    - Self-referencing rules (allow traffic within security group)
+#
+# 2. Name Prefix Usage:
+#    - use_name_prefix = true creates name with random suffix
+#    - Useful for blue-green deployments or multiple environments
+#
+# 3. Complex Ingress/Egress:
+#    - Multiple ingress sources (private subnets, VPC, IPv6)
+#    - Specific egress to database subnet
+#    - All egress allowed (internet access)
+#
+# 4. Self-Referencing Rules:
+#    - Allows all TCP/UDP traffic between instances in same security group
+#    - Common for microservices that need to communicate
+#
+# 5. Multiple Security Groups:
+#    - Advanced SG with complex rules
+#    - Minimal SG with simple HTTPS-only configuration
+
+# =============================================================================
+# Security Notes
+# =============================================================================
+# For production use:
+#
+# 1. CIDR Blocks:
+#    - Replace 0.0.0.0/0 with specific IP ranges
+#    - Use private subnets (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16)
+#    - Consider VPN/bastion host for SSH access
+#
+# 2. IPv6:
+#    - ::/0 allows traffic from all IPv6 addresses
+#    - Restrict to specific IPv6 ranges if possible
+#
+# 3. Self-Referencing:
+#    - Allows all instances in SG to communicate
+#    - Consider limiting to specific ports if possible
+#
+# 4. Egress Rules:
+#    - "all-all" allows all outbound traffic
+#    - For sensitive environments, restrict egress to specific destinations
+#
+# 5. Name Prefix:
+#    - Creates unique names with random suffix
+#    - Useful for testing but may complicate resource tracking
+#    - Consider fixed names for production
