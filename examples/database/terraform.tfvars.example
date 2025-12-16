@@ -1,0 +1,47 @@
+# =============================================================================
+# Database Security Group Example - Variables
+# =============================================================================
+# This file contains example values for the database security group example.
+# Copy this file to terraform.tfvars and modify the values as needed.
+
+# Note: This example uses the default VPC which is automatically discovered.
+# The module variables are configured directly in main.tf for demonstration purposes.
+
+# AWS Region (configured in provider block in main.tf)
+# region = "us-east-1"
+
+# Account and Project Names (configured in main.tf)
+# account_name = "prod"
+# project_name_app = "api"
+# project_name_db = "database"
+
+# Database Access CIDR Blocks (configured in main.tf)
+# Replace these with your actual private subnet CIDR blocks
+# postgres_cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24"]
+# mysql_cidr_blocks = ["10.0.1.0/24"]
+
+# =============================================================================
+# Usage Instructions
+# =============================================================================
+# 1. Copy this file: cp terraform.tfvars.example terraform.tfvars
+# 2. Modify main.tf to adjust:
+#    - account_name and project_name values
+#    - CIDR blocks in ingress_with_cidr_blocks
+#    - Database ports if using non-standard ports
+# 3. Run: terraform init
+# 4. Run: terraform plan
+# 5. Run: terraform apply
+
+# =============================================================================
+# Security Note
+# =============================================================================
+# This example demonstrates secure database access patterns:
+# - Database security group only allows traffic from specific private subnets
+# - Database security group allows traffic from application security group
+# - No egress rules for database (databases don't initiate outbound connections)
+#
+# For production use:
+# - Replace default VPC with your production VPC
+# - Use actual private subnet CIDR blocks
+# - Consider using AWS Secrets Manager for database credentials
+# - Enable encryption at rest and in transit

@@ -1,0 +1,34 @@
+# =============================================================================
+# Basic Security Group Example - Variables
+# =============================================================================
+# This file contains example values for the basic security group example.
+# Copy this file to terraform.tfvars and modify the values as needed.
+
+# Note: This example uses the default VPC which is automatically discovered.
+# The module variables are configured directly in main.tf for demonstration purposes.
+
+# AWS Region (configured in provider block in main.tf)
+# region = "us-east-1"
+
+# Account and Project Names (configured in main.tf)
+# account_name = "dev"
+# project_name = "webapp"
+
+# CIDR blocks to allow HTTP/HTTPS traffic from (configured in main.tf)
+# ingress_cidr_blocks = ["0.0.0.0/0"]  # Warning: This allows traffic from anywhere
+
+# =============================================================================
+# Usage Instructions
+# =============================================================================
+# 1. Copy this file: cp terraform.tfvars.example terraform.tfvars
+# 2. Modify main.tf to adjust account_name, project_name, or CIDR blocks
+# 3. Run: terraform init
+# 4. Run: terraform plan
+# 5. Run: terraform apply
+
+# =============================================================================
+# Security Note
+# =============================================================================
+# Using 0.0.0.0/0 for ingress_cidr_blocks allows traffic from anywhere on the
+# internet. For production use, restrict this to specific IP ranges or use
+# a VPN/bastion host approach.
