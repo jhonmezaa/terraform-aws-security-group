@@ -165,7 +165,7 @@ None reported in this release.
 - [x] Examples cover all major use cases
 - [x] Naming conventions consistent
 - [x] Security best practices implemented
-- [ ] terraform.tfvars.example added to all examples (in progress)
-- [ ] README.md added to each example (already exists)
+- [x] terraform.tfvars.example added to all examples
+- [x] README.md added to each example
 
 [1.0.0]: https://github.com/jhonmezaa/terraform-aws-security-group/releases/tag/v1.0.0
