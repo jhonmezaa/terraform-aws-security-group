@@ -1,0 +1,13 @@
+# =============================================================================
+# Example Terraform Variables
+# =============================================================================
+# Copy this file to terraform.tfvars and update with your values
+#
+# cp terraform.tfvars.example terraform.tfvars
+
+# Account and project naming
+account_name = "dev"
+project_name = "minimal"
+
+# VPC ID (REQUIRED - Update with your VPC ID)
+vpc_id = "vpc-12345678"
