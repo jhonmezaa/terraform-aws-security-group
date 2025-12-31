@@ -33,11 +33,31 @@ variable "vpc_id" {
 variable "account_name" {
   description = "Account name for resource naming."
   type        = string
+
+  validation {
+    condition     = length(var.account_name) > 0 && length(var.account_name) <= 32
+    error_message = "account_name debe tener entre 1 y 32 caracteres."
+  }
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.account_name))
+    error_message = "account_name solo puede contener letras minúsculas, números y guiones."
+  }
 }
 
 variable "project_name" {
   description = "Project name for resource naming."
   type        = string
+
+  validation {
+    condition     = length(var.project_name) > 0 && length(var.project_name) <= 32
+    error_message = "project_name debe tener entre 1 y 32 caracteres."
+  }
+
+  validation {
+    condition     = can(regex("^[a-z0-9-]+$", var.project_name))
+    error_message = "project_name solo puede contener letras minúsculas, números y guiones."
+  }
 }
 
 variable "name" {
@@ -88,6 +108,22 @@ variable "ingress_rules" {
   EOT
   type        = list(string)
   default     = []
+
+  validation {
+    condition = alltrue([
+      for rule in var.ingress_rules :
+      contains([
+        "http-80-tcp", "https-443-tcp", "ssh-tcp",
+        "postgresql-tcp", "mysql-tcp",
+        "aurora-postgresql-tcp", "aurora-mysql-tcp",
+        "redis-tcp", "mongodb-tcp",
+        "elasticsearch-tcp", "kafka-tcp", "rabbitmq-tcp",
+        "dns-udp", "dns-tcp", "nfs-tcp",
+        "all-all", "all-icmp"
+      ], rule)
+    ])
+    error_message = "Una o más reglas de ingress no son válidas. Consulta la descripción de la variable para ver las reglas disponibles."
+  }
 }
 
 # =============================================================================
@@ -189,6 +225,22 @@ variable "egress_rules" {
   description = "List of predefined egress rule names to create. Uses same rule names as ingress_rules."
   type        = list(string)
   default     = []
+
+  validation {
+    condition = alltrue([
+      for rule in var.egress_rules :
+      contains([
+        "http-80-tcp", "https-443-tcp", "ssh-tcp",
+        "postgresql-tcp", "mysql-tcp",
+        "aurora-postgresql-tcp", "aurora-mysql-tcp",
+        "redis-tcp", "mongodb-tcp",
+        "elasticsearch-tcp", "kafka-tcp", "rabbitmq-tcp",
+        "dns-udp", "dns-tcp", "nfs-tcp",
+        "all-all", "all-icmp"
+      ], rule)
+    ])
+    error_message = "Una o más reglas de egress no son válidas. Consulta la descripción de la variable para ver las reglas disponibles."
+  }
 }
 
 # =============================================================================

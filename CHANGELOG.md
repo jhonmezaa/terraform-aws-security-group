@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-12-31
+
+### Added
+
+#### Variable Validations
+- Added validation for `account_name` variable:
+  - Must be between 1-32 characters
+  - Only allows lowercase letters, numbers, and hyphens
+- Added validation for `project_name` variable:
+  - Must be between 1-32 characters
+  - Only allows lowercase letters, numbers, and hyphens
+- Added validation for `ingress_rules` variable:
+  - Validates that predefined rule names exist in the available rules list
+  - Provides clear error messages with available options
+- Added validation for `egress_rules` variable:
+  - Validates that predefined rule names exist in the available rules list
+  - Provides clear error messages with available options
+
+#### Region Support
+- Expanded region prefix mapping from 8 to 29 AWS regions:
+  - **US Regions**: us-east-1, us-east-2, us-west-1, us-west-2
+  - **EU Regions**: eu-west-1/2/3, eu-central-1/2, eu-north-1, eu-south-1/2
+  - **AP Regions**: ap-southeast-1/2/3/4, ap-northeast-1/2/3, ap-south-1/2, ap-east-1
+  - **SA Regions**: sa-east-1
+  - **CA Regions**: ca-central-1, ca-west-1
+  - **ME Regions**: me-south-1, me-central-1
+  - **AF Regions**: af-south-1
+  - **IL Regions**: il-central-1
+
+#### Examples
+- Added new `minimal` example demonstrating the simplest possible usage:
+  - Single HTTP ingress rule from 0.0.0.0/0
+  - All egress traffic allowed
+  - Complete documentation and terraform.tfvars.example
+  - Perfect for quick start and learning
+
+### Changed
+
+#### Documentation
+- Updated variable descriptions with validation rules
+- Enhanced error messages for better debugging experience
+- Improved region prefix documentation with complete list
+
+### Technical Details
+
+- **Breaking Changes**: None
+- **Deprecations**: None
+- **Migration Required**: No
+- **Terraform Version**: >= 1.5.0
+- **AWS Provider Version**: >= 5.0
+
 ## [1.0.1] - 2024-12-16
 
 ### Changed

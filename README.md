@@ -5,9 +5,11 @@ Production-ready Terraform module for creating and managing AWS Security Groups 
 ## Features
 
 - **Predefined Rules**: Built-in rules for common services (HTTP, HTTPS, SSH, databases, etc.)
+- **Input Validation**: Comprehensive variable validations for account/project names and predefined rules
 - **Flexible Rule Types**: Support for CIDR blocks, IPv6, source security groups, self-referencing, and prefix lists
 - **Multiple Naming Options**: Fixed names or name prefixes for resource management
 - **VPC Security Group Rules**: Uses modern `aws_vpc_security_group_*_rule` resources
+- **Regional Support**: Automatic region prefix mapping for 29 AWS regions across all continents
 - **Comprehensive Outputs**: Detailed outputs for security group attributes and rule IDs
 - **Best Practices**: Follows AWS security best practices and Terraform conventions
 
@@ -155,8 +157,8 @@ The module includes predefined rules for common services:
 
 | Name                    | Description                                      | Type          | Default           | Required |
 |-------------------------|--------------------------------------------------|---------------|-------------------|----------|
-| `account_name`          | Account name for resource naming                | `string`      | -                 | yes      |
-| `project_name`          | Project name for resource naming                | `string`      | -                 | yes      |
+| `account_name`          | Account name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                 | yes      |
+| `project_name`          | Project name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                 | yes      |
 | `name`                  | Security group name                             | `string`      | `null`            | no       |
 | `use_name_prefix`       | Use name_prefix instead of name                 | `bool`        | `false`           | no       |
 | `region_prefix`         | Region prefix for naming                        | `string`      | `null`            | no       |
@@ -167,7 +169,7 @@ The module includes predefined rules for common services:
 
 | Name                                       | Description                                | Type           | Default | Required |
 |--------------------------------------------|-------------------------------------------|----------------|---------|----------|
-| `ingress_rules`                            | List of predefined ingress rule names     | `list(string)` | `[]`    | no       |
+| `ingress_rules`                            | List of predefined ingress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
 | `ingress_cidr_blocks`                      | CIDR blocks for predefined ingress rules  | `list(string)` | `[]`    | no       |
 | `ingress_with_cidr_blocks`                 | Ingress rules with CIDR blocks            | `list(object)` | `[]`    | no       |
 | `ingress_ipv6_cidr_blocks`                 | IPv6 CIDR blocks for predefined rules     | `list(string)` | `[]`    | no       |
@@ -180,7 +182,7 @@ The module includes predefined rules for common services:
 
 | Name                                       | Description                                | Type           | Default | Required |
 |--------------------------------------------|-------------------------------------------|----------------|---------|----------|
-| `egress_rules`                             | List of predefined egress rule names      | `list(string)` | `[]`    | no       |
+| `egress_rules`                             | List of predefined egress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
 | `egress_cidr_blocks`                       | CIDR blocks for predefined egress rules   | `list(string)` | `[]`    | no       |
 | `egress_with_cidr_blocks`                  | Egress rules with CIDR blocks             | `list(object)` | `[]`    | no       |
 | `egress_ipv6_cidr_blocks`                  | IPv6 CIDR blocks for predefined rules     | `list(string)` | `[]`    | no       |
@@ -219,24 +221,59 @@ The module includes predefined rules for common services:
 
 See the [examples](./examples) directory for complete usage examples:
 
+- [Minimal](./examples/minimal) - Simplest possible usage with single HTTP rule (perfect for quick start)
 - [Basic](./examples/basic) - Simple web security group with HTTP/HTTPS
 - [Database](./examples/database) - Database security groups with restricted access
 - [Advanced](./examples/advanced) - Complex multi-rule security groups
 
 ## Region Prefixes
 
-The module automatically determines region prefixes for resource naming:
+The module automatically determines region prefixes for resource naming. Supports 29 AWS regions:
 
+### US Regions
 | Region          | Prefix  |
 |-----------------|---------|
 | us-east-1       | ause1   |
 | us-east-2       | ause2   |
-| us-west-1       | usw1    |
-| us-west-2       | usw2    |
-| eu-west-1       | euw1    |
-| eu-central-1    | euc1    |
+| us-west-1       | ausw1   |
+| us-west-2       | ausw2   |
+
+### EU Regions
+| Region          | Prefix  |
+|-----------------|---------|
+| eu-west-1       | euwe1   |
+| eu-west-2       | euwe2   |
+| eu-west-3       | euwe3   |
+| eu-central-1    | euce1   |
+| eu-central-2    | euce2   |
+| eu-north-1      | euno1   |
+| eu-south-1      | euso1   |
+| eu-south-2      | euso2   |
+
+### AP Regions
+| Region          | Prefix  |
+|-----------------|---------|
 | ap-southeast-1  | apse1   |
+| ap-southeast-2  | apse2   |
+| ap-southeast-3  | apse3   |
+| ap-southeast-4  | apse4   |
 | ap-northeast-1  | apne1   |
+| ap-northeast-2  | apne2   |
+| ap-northeast-3  | apne3   |
+| ap-south-1      | apso1   |
+| ap-south-2      | apso2   |
+| ap-east-1       | apea1   |
+
+### Other Regions
+| Region          | Prefix  | Geographic Area |
+|-----------------|---------|-----------------|
+| sa-east-1       | saea1   | South America   |
+| ca-central-1    | cace1   | Canada          |
+| ca-west-1       | cawe1   | Canada          |
+| me-south-1      | meso1   | Middle East     |
+| me-central-1    | mece1   | Middle East     |
+| af-south-1      | afso1   | Africa          |
+| il-central-1    | ilce1   | Israel          |
 
 You can override this with the `region_prefix` variable.
 
