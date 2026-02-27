@@ -78,6 +78,12 @@ variable "region_prefix" {
   default     = null
 }
 
+variable "use_region_prefix" {
+  description = "Whether to include the region prefix in resource names. When false, names omit the region prefix (e.g., 'sg-prod-myapp' instead of 'ause1-sg-prod-myapp')"
+  type        = bool
+  default     = true
+}
+
 variable "description" {
   description = "Description of the security group."
   type        = string

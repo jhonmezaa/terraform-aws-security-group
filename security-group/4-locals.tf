@@ -49,6 +49,9 @@ locals {
     data.aws_region.current.id
   )
 
+  # Name prefix: includes region prefix with trailing dash, or empty string
+  name_prefix = var.use_region_prefix ? "${local.region_prefix}-" : ""
+
   # =============================================================================
   # Predefined Rules for Common Services
   # =============================================================================
@@ -201,15 +204,15 @@ locals {
   security_group_id = var.security_group_id
 
   sg_name = var.name != null ? var.name : (
-    local.use_name_prefix ? null : "${local.region_prefix}-sg-${var.account_name}-${var.project_name}"
+    local.use_name_prefix ? null : "${local.name_prefix}sg-${var.account_name}-${var.project_name}"
   )
 
   sg_name_prefix = local.use_name_prefix ? (
-    var.name != null ? "${var.name}-" : "${local.region_prefix}-sg-${var.account_name}-${var.project_name}-"
+    var.name != null ? "${var.name}-" : "${local.name_prefix}sg-${var.account_name}-${var.project_name}-"
   ) : null
 
   # Base name for Name tag (without trailing dash when using name_prefix)
-  sg_name_tag = var.name != null ? var.name : "${local.region_prefix}-sg-${var.account_name}-${var.project_name}"
+  sg_name_tag = var.name != null ? var.name : "${local.name_prefix}sg-${var.account_name}-${var.project_name}"
 
   # Get the security group ID (created or provided)
   this_sg_id = try(

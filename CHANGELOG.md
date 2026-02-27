@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.2.0] - 2026-02-27
+
+### Added
+- `use_region_prefix` boolean variable (default: `true`) to control whether the region prefix is included in security group names. When `false`, names omit the prefix (e.g., `sg-prod-myapp` instead of `ause1-sg-prod-myapp`)
+
 ## [v1.1.2] - 2026-02-27
 
 ### Changed
