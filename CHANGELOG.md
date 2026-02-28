@@ -3,19 +3,20 @@
 ## [v1.2.0] - 2026-02-27
 
 ### Added
+
 - `use_region_prefix` boolean variable (default: `true`) to control whether the region prefix is included in security group names. When `false`, names omit the prefix (e.g., `sg-prod-myapp` instead of `ause1-sg-prod-myapp`)
 
 ## [v1.1.2] - 2026-02-27
 
 ### Changed
-- Standardize Terraform `required_version` to `~> 1.0` across module and examples
 
+- Standardize Terraform `required_version` to `~> 1.0` across module and examples
 
 ## [v1.1.1] - 2026-02-27
 
 ### Changed
-- Update AWS provider constraint to `~> 6.0` across module and examples
 
+- Update AWS provider constraint to `~> 6.0` across module and examples
 
 All notable changes to this project will be documented in this file.
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Variable Validations
+
 - Added validation for `account_name` variable:
   - Must be between 1-32 characters
   - Only allows lowercase letters, numbers, and hyphens
@@ -41,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Provides clear error messages with available options
 
 #### Region Support
+
 - Expanded region prefix mapping from 8 to 29 AWS regions:
   - **US Regions**: us-east-1, us-east-2, us-west-1, us-west-2
   - **EU Regions**: eu-west-1/2/3, eu-central-1/2, eu-north-1, eu-south-1/2
@@ -52,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **IL Regions**: il-central-1
 
 #### Examples
+
 - Added new `minimal` example demonstrating the simplest possible usage:
   - Single HTTP ingress rule from 0.0.0.0/0
   - All egress traffic allowed
@@ -61,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### Documentation
+
 - Updated variable descriptions with validation rules
 - Enhanced error messages for better debugging experience
 - Improved region prefix documentation with complete list
@@ -78,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 #### Documentation
+
 - Updated CHANGELOG release checklist to mark all items as completed
 - All examples now include terraform.tfvars.example and README.md files
 
@@ -90,6 +96,7 @@ First production-ready release of the AWS Security Group Terraform module with c
 ### Added
 
 #### Core Security Group Features
+
 - Security group creation with customizable configuration
 - Support for fixed names and name prefixes
 - VPC association
@@ -98,12 +105,14 @@ First production-ready release of the AWS Security Group Terraform module with c
 - Consistent resource naming convention across all resources
 
 #### Naming Convention
+
 - Automatic region prefix mapping for 20+ AWS regions
 - Fixed name: `{region_prefix}-sg-{account_name}-{project_name}`
 - Name prefix support: `{region_prefix}-sg-{account_name}-{project_name}-`
 - Custom name override via `name` variable
 
 #### Predefined Rules
+
 - **Web Services**: http-80-tcp, https-443-tcp
 - **Remote Access**: ssh-tcp
 - **Databases**:
@@ -118,6 +127,7 @@ First production-ready release of the AWS Security Group Terraform module with c
 - **General**: all-all, all-icmp
 
 #### Ingress Rules - Multiple Types
+
 - **Predefined rules**: Use common rule names with CIDR blocks
 - **CIDR blocks**: Custom rules with IPv4 CIDR blocks
 - **IPv6 CIDR blocks**: Custom rules with IPv6 support
@@ -127,6 +137,7 @@ First production-ready release of the AWS Security Group Terraform module with c
 - Dynamic rule creation using for_each pattern
 
 #### Egress Rules - Multiple Types
+
 - **Predefined rules**: Use common rule names with CIDR blocks
 - **CIDR blocks**: Custom rules with IPv4 CIDR blocks
 - **IPv6 CIDR blocks**: Custom rules with IPv6 support
@@ -136,12 +147,14 @@ First production-ready release of the AWS Security Group Terraform module with c
 - Dynamic rule creation using for_each pattern
 
 #### Modern VPC Security Group Rules
+
 - Uses `aws_vpc_security_group_ingress_rule` resources
 - Uses `aws_vpc_security_group_egress_rule` resources
 - Better dependency management than inline rules
 - Prevents rule conflicts and race conditions
 
 #### Flexible Configuration
+
 - Create or use existing security group
 - Conditional resource creation via `create` and `create_sg` flags
 - Support for both ingress and egress rules
@@ -149,16 +162,19 @@ First production-ready release of the AWS Security Group Terraform module with c
 - Tags support for resource organization
 
 #### Outputs (8 total)
+
 - Security group attributes (ID, ARN, name, VPC ID, owner ID, description)
 - Ingress rules summary (all rule types with IDs)
 - Egress rules summary (all rule types with IDs)
 
 #### Examples
+
 - **basic**: Simple web security group with HTTP/HTTPS access
 - **database**: Database security group with restricted access from specific subnets and security groups
 - **advanced**: Complex multi-rule setup with IPv6, self-referencing, and multiple rule types
 
 #### Documentation
+
 - Comprehensive README with usage examples
 - Complete variable documentation
 - Output variable documentation
@@ -167,6 +183,7 @@ First production-ready release of the AWS Security Group Terraform module with c
 - Integration examples
 
 #### Code Quality
+
 - Terraform 1.5+ compatibility
 - AWS Provider 5.0+ compatibility
 - Numbered file organization (0-7)
@@ -179,22 +196,26 @@ First production-ready release of the AWS Security Group Terraform module with c
 ### Technical Details
 
 #### Supported Regions
+
 - All AWS commercial regions
 - Automatic region prefix mapping for 20+ regions
 - Custom region prefix override support
 
 #### Resource Limits
+
 - Security groups: 2,500 per VPC (AWS default)
 - Rules per security group: 60 inbound, 60 outbound (AWS default)
 - AWS service quotas apply
 
 #### Performance
+
 - Efficient use of for_each over count
 - Minimal resource dependencies
 - Optimized data source queries
 - Lazy evaluation of optional resources
 
 #### Compatibility
+
 - Terraform >= 1.5.0
 - AWS Provider >= 5.0
 - Compatible with Terraform Cloud
@@ -204,9 +225,11 @@ First production-ready release of the AWS Security Group Terraform module with c
 ### Dependencies
 
 #### Required Providers
+
 - hashicorp/aws >= 5.0
 
 #### Terraform Version
+
 - terraform >= 1.5.0
 
 ### Notes

@@ -122,100 +122,100 @@ module "advanced_sg" {
 
 The module includes predefined rules for common services:
 
-| Rule Name              | Port(s) | Protocol | Description              |
-|------------------------|---------|----------|--------------------------|
-| `http-80-tcp`          | 80      | TCP      | HTTP                     |
-| `https-443-tcp`        | 443     | TCP      | HTTPS                    |
-| `ssh-tcp`              | 22      | TCP      | SSH                      |
-| `postgresql-tcp`       | 5432    | TCP      | PostgreSQL               |
-| `mysql-tcp`            | 3306    | TCP      | MySQL/Aurora MySQL       |
-| `aurora-postgresql-tcp`| 5432    | TCP      | Aurora PostgreSQL        |
-| `aurora-mysql-tcp`     | 3306    | TCP      | Aurora MySQL             |
-| `redis-tcp`            | 6379    | TCP      | Redis                    |
-| `mongodb-tcp`          | 27017   | TCP      | MongoDB                  |
-| `elasticsearch-tcp`    | 9200-9300| TCP     | Elasticsearch            |
-| `kafka-tcp`            | 9092    | TCP      | Kafka                    |
-| `rabbitmq-tcp`         | 5672    | TCP      | RabbitMQ                 |
-| `dns-udp`              | 53      | UDP      | DNS                      |
-| `dns-tcp`              | 53      | TCP      | DNS                      |
-| `nfs-tcp`              | 2049    | TCP      | NFS                      |
-| `all-all`              | 0       | -1       | All protocols            |
-| `all-icmp`             | -1      | ICMP     | All ICMP                 |
+| Rule Name               | Port(s)   | Protocol | Description        |
+| ----------------------- | --------- | -------- | ------------------ |
+| `http-80-tcp`           | 80        | TCP      | HTTP               |
+| `https-443-tcp`         | 443       | TCP      | HTTPS              |
+| `ssh-tcp`               | 22        | TCP      | SSH                |
+| `postgresql-tcp`        | 5432      | TCP      | PostgreSQL         |
+| `mysql-tcp`             | 3306      | TCP      | MySQL/Aurora MySQL |
+| `aurora-postgresql-tcp` | 5432      | TCP      | Aurora PostgreSQL  |
+| `aurora-mysql-tcp`      | 3306      | TCP      | Aurora MySQL       |
+| `redis-tcp`             | 6379      | TCP      | Redis              |
+| `mongodb-tcp`           | 27017     | TCP      | MongoDB            |
+| `elasticsearch-tcp`     | 9200-9300 | TCP      | Elasticsearch      |
+| `kafka-tcp`             | 9092      | TCP      | Kafka              |
+| `rabbitmq-tcp`          | 5672      | TCP      | RabbitMQ           |
+| `dns-udp`               | 53        | UDP      | DNS                |
+| `dns-tcp`               | 53        | TCP      | DNS                |
+| `nfs-tcp`               | 2049      | TCP      | NFS                |
+| `all-all`               | 0         | -1       | All protocols      |
+| `all-icmp`              | -1        | ICMP     | All ICMP           |
 
 ## Inputs
 
 ### General Configuration
 
-| Name                    | Description                                      | Type     | Default           | Required |
-|-------------------------|--------------------------------------------------|----------|-------------------|----------|
-| `create`                | Whether to create security group and rules      | `bool`   | `true`            | no       |
-| `create_sg`             | Whether to create security group                | `bool`   | `true`            | no       |
-| `security_group_id`     | ID of existing security group                   | `string` | `null`            | no       |
-| `vpc_id`                | VPC ID where security group will be created     | `string` | `null`            | no       |
+| Name                | Description                                 | Type     | Default | Required |
+| ------------------- | ------------------------------------------- | -------- | ------- | -------- |
+| `create`            | Whether to create security group and rules  | `bool`   | `true`  | no       |
+| `create_sg`         | Whether to create security group            | `bool`   | `true`  | no       |
+| `security_group_id` | ID of existing security group               | `string` | `null`  | no       |
+| `vpc_id`            | VPC ID where security group will be created | `string` | `null`  | no       |
 
 ### Naming
 
-| Name                    | Description                                      | Type          | Default           | Required |
-|-------------------------|--------------------------------------------------|---------------|-------------------|----------|
-| `account_name`          | Account name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                 | yes      |
-| `project_name`          | Project name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                 | yes      |
-| `name`                  | Security group name                             | `string`      | `null`            | no       |
-| `use_name_prefix`       | Use name_prefix instead of name                 | `bool`        | `false`           | no       |
-| `region_prefix`         | Region prefix for naming                        | `string`      | `null`            | no       |
-| `description`           | Security group description                      | `string`      | `"Managed by Terraform"` | no |
-| `tags`                  | Additional tags                                 | `map(string)` | `{}`              | no       |
+| Name              | Description                                                                        | Type          | Default                  | Required |
+| ----------------- | ---------------------------------------------------------------------------------- | ------------- | ------------------------ | -------- |
+| `account_name`    | Account name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                        | yes      |
+| `project_name`    | Project name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                        | yes      |
+| `name`            | Security group name                                                                | `string`      | `null`                   | no       |
+| `use_name_prefix` | Use name_prefix instead of name                                                    | `bool`        | `false`                  | no       |
+| `region_prefix`   | Region prefix for naming                                                           | `string`      | `null`                   | no       |
+| `description`     | Security group description                                                         | `string`      | `"Managed by Terraform"` | no       |
+| `tags`            | Additional tags                                                                    | `map(string)` | `{}`                     | no       |
 
 ### Ingress Rules
 
-| Name                                       | Description                                | Type           | Default | Required |
-|--------------------------------------------|-------------------------------------------|----------------|---------|----------|
-| `ingress_rules`                            | List of predefined ingress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
-| `ingress_cidr_blocks`                      | CIDR blocks for predefined ingress rules  | `list(string)` | `[]`    | no       |
-| `ingress_with_cidr_blocks`                 | Ingress rules with CIDR blocks            | `list(object)` | `[]`    | no       |
-| `ingress_ipv6_cidr_blocks`                 | IPv6 CIDR blocks for predefined rules     | `list(string)` | `[]`    | no       |
-| `ingress_with_ipv6_cidr_blocks`            | Ingress rules with IPv6 CIDR blocks       | `list(object)` | `[]`    | no       |
-| `ingress_with_source_security_group_id`    | Ingress rules with source SG IDs          | `list(object)` | `[]`    | no       |
-| `ingress_with_self`                        | Ingress rules with self reference         | `list(object)` | `[]`    | no       |
-| `ingress_with_prefix_list_ids`             | Ingress rules with prefix list IDs        | `list(object)` | `[]`    | no       |
+| Name                                    | Description                                                               | Type           | Default | Required |
+| --------------------------------------- | ------------------------------------------------------------------------- | -------------- | ------- | -------- |
+| `ingress_rules`                         | List of predefined ingress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
+| `ingress_cidr_blocks`                   | CIDR blocks for predefined ingress rules                                  | `list(string)` | `[]`    | no       |
+| `ingress_with_cidr_blocks`              | Ingress rules with CIDR blocks                                            | `list(object)` | `[]`    | no       |
+| `ingress_ipv6_cidr_blocks`              | IPv6 CIDR blocks for predefined rules                                     | `list(string)` | `[]`    | no       |
+| `ingress_with_ipv6_cidr_blocks`         | Ingress rules with IPv6 CIDR blocks                                       | `list(object)` | `[]`    | no       |
+| `ingress_with_source_security_group_id` | Ingress rules with source SG IDs                                          | `list(object)` | `[]`    | no       |
+| `ingress_with_self`                     | Ingress rules with self reference                                         | `list(object)` | `[]`    | no       |
+| `ingress_with_prefix_list_ids`          | Ingress rules with prefix list IDs                                        | `list(object)` | `[]`    | no       |
 
 ### Egress Rules
 
-| Name                                       | Description                                | Type           | Default | Required |
-|--------------------------------------------|-------------------------------------------|----------------|---------|----------|
-| `egress_rules`                             | List of predefined egress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
-| `egress_cidr_blocks`                       | CIDR blocks for predefined egress rules   | `list(string)` | `[]`    | no       |
-| `egress_with_cidr_blocks`                  | Egress rules with CIDR blocks             | `list(object)` | `[]`    | no       |
-| `egress_ipv6_cidr_blocks`                  | IPv6 CIDR blocks for predefined rules     | `list(string)` | `[]`    | no       |
-| `egress_with_ipv6_cidr_blocks`             | Egress rules with IPv6 CIDR blocks        | `list(object)` | `[]`    | no       |
-| `egress_with_source_security_group_id`     | Egress rules with source SG IDs           | `list(object)` | `[]`    | no       |
-| `egress_with_self`                         | Egress rules with self reference          | `list(object)` | `[]`    | no       |
-| `egress_with_prefix_list_ids`              | Egress rules with prefix list IDs         | `list(object)` | `[]`    | no       |
+| Name                                   | Description                                                              | Type           | Default | Required |
+| -------------------------------------- | ------------------------------------------------------------------------ | -------------- | ------- | -------- |
+| `egress_rules`                         | List of predefined egress rule names (validated against available rules) | `list(string)` | `[]`    | no       |
+| `egress_cidr_blocks`                   | CIDR blocks for predefined egress rules                                  | `list(string)` | `[]`    | no       |
+| `egress_with_cidr_blocks`              | Egress rules with CIDR blocks                                            | `list(object)` | `[]`    | no       |
+| `egress_ipv6_cidr_blocks`              | IPv6 CIDR blocks for predefined rules                                    | `list(string)` | `[]`    | no       |
+| `egress_with_ipv6_cidr_blocks`         | Egress rules with IPv6 CIDR blocks                                       | `list(object)` | `[]`    | no       |
+| `egress_with_source_security_group_id` | Egress rules with source SG IDs                                          | `list(object)` | `[]`    | no       |
+| `egress_with_self`                     | Egress rules with self reference                                         | `list(object)` | `[]`    | no       |
+| `egress_with_prefix_list_ids`          | Egress rules with prefix list IDs                                        | `list(object)` | `[]`    | no       |
 
 ### Other
 
 | Name                     | Description                                     | Type   | Default | Required |
-|--------------------------|------------------------------------------------|--------|---------|----------|
-| `revoke_rules_on_delete` | Revoke all rules before deleting security group| `bool` | `false` | no       |
+| ------------------------ | ----------------------------------------------- | ------ | ------- | -------- |
+| `revoke_rules_on_delete` | Revoke all rules before deleting security group | `bool` | `false` | no       |
 
 ## Outputs
 
-| Name                          | Description                                    |
-|-------------------------------|------------------------------------------------|
-| `security_group_id`           | The ID of the security group                   |
-| `security_group_arn`          | The ARN of the security group                  |
-| `security_group_name`         | The name of the security group                 |
-| `security_group_vpc_id`       | The VPC ID of the security group               |
-| `security_group_owner_id`     | The owner ID of the security group             |
-| `security_group_description`  | The description of the security group          |
-| `ingress_rules`               | Summary of ingress rules created               |
-| `egress_rules`                | Summary of egress rules created                |
+| Name                         | Description                           |
+| ---------------------------- | ------------------------------------- |
+| `security_group_id`          | The ID of the security group          |
+| `security_group_arn`         | The ARN of the security group         |
+| `security_group_name`        | The name of the security group        |
+| `security_group_vpc_id`      | The VPC ID of the security group      |
+| `security_group_owner_id`    | The owner ID of the security group    |
+| `security_group_description` | The description of the security group |
+| `ingress_rules`              | Summary of ingress rules created      |
+| `egress_rules`               | Summary of egress rules created       |
 
 ## Requirements
 
-| Name       | Version   |
-|------------|-----------|
-| terraform  | >= 1.5.0  |
-| aws        | >= 5.0    |
+| Name      | Version  |
+| --------- | -------- |
+| terraform | >= 1.5.0 |
+| aws       | >= 5.0   |
 
 ## Examples
 
@@ -231,55 +231,60 @@ See the [examples](./examples) directory for complete usage examples:
 The module automatically determines region prefixes for resource naming. Supports 29 AWS regions:
 
 ### US Regions
-| Region          | Prefix  |
-|-----------------|---------|
-| us-east-1       | ause1   |
-| us-east-2       | ause2   |
-| us-west-1       | ausw1   |
-| us-west-2       | ausw2   |
+
+| Region    | Prefix |
+| --------- | ------ |
+| us-east-1 | ause1  |
+| us-east-2 | ause2  |
+| us-west-1 | ausw1  |
+| us-west-2 | ausw2  |
 
 ### EU Regions
-| Region          | Prefix  |
-|-----------------|---------|
-| eu-west-1       | euwe1   |
-| eu-west-2       | euwe2   |
-| eu-west-3       | euwe3   |
-| eu-central-1    | euce1   |
-| eu-central-2    | euce2   |
-| eu-north-1      | euno1   |
-| eu-south-1      | euso1   |
-| eu-south-2      | euso2   |
+
+| Region       | Prefix |
+| ------------ | ------ |
+| eu-west-1    | euwe1  |
+| eu-west-2    | euwe2  |
+| eu-west-3    | euwe3  |
+| eu-central-1 | euce1  |
+| eu-central-2 | euce2  |
+| eu-north-1   | euno1  |
+| eu-south-1   | euso1  |
+| eu-south-2   | euso2  |
 
 ### AP Regions
-| Region          | Prefix  |
-|-----------------|---------|
-| ap-southeast-1  | apse1   |
-| ap-southeast-2  | apse2   |
-| ap-southeast-3  | apse3   |
-| ap-southeast-4  | apse4   |
-| ap-northeast-1  | apne1   |
-| ap-northeast-2  | apne2   |
-| ap-northeast-3  | apne3   |
-| ap-south-1      | apso1   |
-| ap-south-2      | apso2   |
-| ap-east-1       | apea1   |
+
+| Region         | Prefix |
+| -------------- | ------ |
+| ap-southeast-1 | apse1  |
+| ap-southeast-2 | apse2  |
+| ap-southeast-3 | apse3  |
+| ap-southeast-4 | apse4  |
+| ap-northeast-1 | apne1  |
+| ap-northeast-2 | apne2  |
+| ap-northeast-3 | apne3  |
+| ap-south-1     | apso1  |
+| ap-south-2     | apso2  |
+| ap-east-1      | apea1  |
 
 ### Other Regions
-| Region          | Prefix  | Geographic Area |
-|-----------------|---------|-----------------|
-| sa-east-1       | saea1   | South America   |
-| ca-central-1    | cace1   | Canada          |
-| ca-west-1       | cawe1   | Canada          |
-| me-south-1      | meso1   | Middle East     |
-| me-central-1    | mece1   | Middle East     |
-| af-south-1      | afso1   | Africa          |
-| il-central-1    | ilce1   | Israel          |
+
+| Region       | Prefix | Geographic Area |
+| ------------ | ------ | --------------- |
+| sa-east-1    | saea1  | South America   |
+| ca-central-1 | cace1  | Canada          |
+| ca-west-1    | cawe1  | Canada          |
+| me-south-1   | meso1  | Middle East     |
+| me-central-1 | mece1  | Middle East     |
+| af-south-1   | afso1  | Africa          |
+| il-central-1 | ilce1  | Israel          |
 
 You can override this with the `region_prefix` variable.
 
 ## Security Group Naming
 
 By default, security groups are named:
+
 ```
 {region_prefix}-sg-{account_name}-{project_name}
 ```
@@ -287,6 +292,7 @@ By default, security groups are named:
 Example: `ause1-sg-prod-webapp`
 
 When `use_name_prefix = true`, a name prefix is used instead:
+
 ```
 {region_prefix}-sg-{account_name}-{project_name}-
 ```
