@@ -1,5 +1,10 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [v1.2.3] - 2026-10-27
 
 ### Fixed
@@ -33,12 +38,7 @@
 
 - Update AWS provider constraint to `~> 6.0` across module and examples
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.1.0] - 2025-12-31
+## [v1.1.0] - 2025-12-31
 
 ### Added
 
@@ -93,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Terraform Version**: >= 1.5.0
 - **AWS Provider Version**: >= 5.0
 
-## [1.0.1] - 2024-12-16
+## [v1.0.1] - 2024-12-16
 
 ### Changed
 
@@ -102,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated CHANGELOG release checklist to mark all items as completed
 - All examples now include terraform.tfvars.example and README.md files
 
-## [1.0.0] - 2024-12-16
+## [v1.0.0] - 2024-12-16
 
 ### 🎉 Initial Release
 
@@ -282,5 +282,5 @@ None reported in this release.
 - [x] terraform.tfvars.example added to all examples
 - [x] README.md added to each example
 
-[1.0.1]: https://github.com/jhonmezaa/terraform-aws-security-group/releases/tag/v1.0.1
-[1.0.0]: https://github.com/jhonmezaa/terraform-aws-security-group/releases/tag/v1.0.0
+[v1.0.1]: https://github.com/jhonmezaa/terraform-aws-security-group/releases/tag/v1.0.1
+[v1.0.0]: https://github.com/jhonmezaa/terraform-aws-security-group/releases/tag/v1.0.0
