@@ -7,7 +7,8 @@ This example demonstrates advanced security group configurations showcasing all 
 - **Multiple Rule Types**: Predefined rules, custom CIDR blocks, IPv6, source security groups, self-referencing rules
 - **Name Prefix**: Uses `use_name_prefix = true` for dynamic naming
 - **Self-Referencing Rules**: Allows traffic between instances in the same security group
-- **IPv6 Support**: Demonstrates IPv6 CIDR block rules
+- **IPv6 Support**: Demonstrates IPv6 CIDR block rules and dual-stack predefined egress (`egress_ipv6_cidr_blocks`)
+- **Common Tags**: Uses `tags_common` shared by both security groups
 - **Complex Configurations**: Shows how to combine multiple rule types in a single security group
 - **Minimal Configuration**: Also includes a minimal security group example for comparison
 

@@ -84,13 +84,20 @@ variable "public_cidr_blocks" {
 }
 
 # Tags
+variable "tags_common" {
+  description = "Common tags applied to every resource of both security groups"
+  type        = map(string)
+  default = {
+    Owner = "platform-team"
+  }
+}
+
 variable "advanced_tags" {
   description = "Tags for advanced security group"
   type        = map(string)
   default = {
     Environment = "Production"
     Team        = "Platform"
-    Managed     = "Terraform"
     Complexity  = "Advanced"
   }
 }
