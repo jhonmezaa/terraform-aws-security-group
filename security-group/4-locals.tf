@@ -218,6 +218,13 @@ locals {
   # Base name for Name tag (without trailing dash when using name_prefix)
   sg_name_tag = var.name != null ? var.name : local.sg_auto_name
 
+  # Tags: tags_common + tags + mandatory Name/ManagedBy (always last)
+  rule_tags = merge(var.tags_common, var.tags)
+  sg_tags = merge(local.rule_tags, {
+    Name      = local.sg_name_tag
+    ManagedBy = "Terraform"
+  })
+
   # Get the security group ID (created or provided)
   this_sg_id = try(
     coalescelist(

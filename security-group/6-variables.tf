@@ -64,6 +64,11 @@ variable "name" {
   description = "Name of the security group. If not provided, a name will be generated using account_name and project_name."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.name == null || (length(coalesce(var.name, "x")) <= 255 && !startswith(lower(coalesce(var.name, "x")), "sg-"))
+    error_message = "name no puede empezar por \"sg-\" (restricción de AWS) y debe tener como máximo 255 caracteres."
+  }
 }
 
 variable "use_name_prefix" {
@@ -79,7 +84,7 @@ variable "region_prefix" {
 }
 
 variable "use_region_prefix" {
-  description = "Whether to include the region prefix in resource names. When false, names omit the region prefix (e.g., 'sg-prod-myapp' instead of 'ause1-sg-prod-myapp')"
+  description = "Whether to include the region prefix in resource names. When false, names omit the region prefix and the type moves to the end, because AWS forbids names starting with 'sg-' (e.g., 'prod-myapp-sg' instead of 'ause1-sg-prod-myapp')"
   type        = bool
   default     = true
 }
@@ -90,10 +95,39 @@ variable "description" {
   default     = "Managed by Terraform"
 }
 
-variable "tags" {
-  description = "Additional tags to apply to the security group."
+variable "tags_common" {
+  description = "Common tags applied to every resource created by the module (merged before tags)."
   type        = map(string)
   default     = {}
+}
+
+variable "tags" {
+  description = "Additional tags to apply to the security group and its rules."
+  type        = map(string)
+  default     = {}
+}
+
+variable "region" {
+  description = "Region where the resources will be managed. Defaults to the region configured in the provider. Also used to derive the region prefix."
+  type        = string
+  default     = null
+}
+
+variable "timeouts" {
+  description = "Create and delete timeouts for the security group."
+  type = object({
+    create = optional(string)
+    delete = optional(string)
+  })
+  default = null
+}
+
+variable "vpc_associations" {
+  description = "Map of additional VPCs to associate the security group with (e.g. VPCs shared through AWS RAM)."
+  type = map(object({
+    vpc_id = string
+  }))
+  default = {}
 }
 
 # =============================================================================
