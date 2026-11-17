@@ -5,6 +5,11 @@
 output "security_group_id" {
   description = "The ID of the security group."
   value       = local.this_sg_id
+
+  precondition {
+    condition     = !(var.create && !var.create_sg) || var.security_group_id != null
+    error_message = "security_group_id es obligatorio cuando create_sg = false."
+  }
 }
 
 output "security_group_arn" {
@@ -74,7 +79,7 @@ output "security_group_description" {
 output "ingress_rules" {
   description = "Summary of ingress rules created."
   value = {
-    predefined               = { for k, v in aws_vpc_security_group_ingress_rule.ingress_rules : k => v.id }
+    predefined               = merge({ for k, v in aws_vpc_security_group_ingress_rule.ingress_rules : k => v.id }, { for k, v in aws_vpc_security_group_ingress_rule.ingress_rules_cidr : k => v.id }, { for k, v in aws_vpc_security_group_ingress_rule.ingress_rules_ipv6 : k => v.id })
     cidr_blocks              = { for k, v in aws_vpc_security_group_ingress_rule.ingress_with_cidr_blocks : k => v.id }
     ipv6_cidr_blocks         = { for k, v in aws_vpc_security_group_ingress_rule.ingress_with_ipv6_cidr_blocks : k => v.id }
     source_security_group_id = { for k, v in aws_vpc_security_group_ingress_rule.ingress_with_source_security_group_id : k => v.id }
@@ -86,11 +91,19 @@ output "ingress_rules" {
 output "egress_rules" {
   description = "Summary of egress rules created."
   value = {
-    predefined               = { for k, v in aws_vpc_security_group_egress_rule.egress_rules : k => v.id }
+    predefined               = merge({ for k, v in aws_vpc_security_group_egress_rule.egress_rules : k => v.id }, { for k, v in aws_vpc_security_group_egress_rule.egress_rules_cidr : k => v.id }, { for k, v in aws_vpc_security_group_egress_rule.egress_rules_ipv6 : k => v.id })
     cidr_blocks              = { for k, v in aws_vpc_security_group_egress_rule.egress_with_cidr_blocks : k => v.id }
     ipv6_cidr_blocks         = { for k, v in aws_vpc_security_group_egress_rule.egress_with_ipv6_cidr_blocks : k => v.id }
     source_security_group_id = { for k, v in aws_vpc_security_group_egress_rule.egress_with_source_security_group_id : k => v.id }
     self                     = { for k, v in aws_vpc_security_group_egress_rule.egress_with_self : k => v.id }
     prefix_list_ids          = { for k, v in aws_vpc_security_group_egress_rule.egress_with_prefix_list_ids : k => v.id }
   }
+}
+
+output "vpc_associations" {
+  description = "Map of additional VPC associations (VPC ID and association state), keyed like var.vpc_associations."
+  value = { for k, v in aws_vpc_security_group_vpc_association.this : k => {
+    vpc_id = v.vpc_id
+    state  = v.state
+  } }
 }
