@@ -87,9 +87,10 @@ module "advanced_security_group" {
     }
   ]
 
-  # Egress rules
-  egress_rules       = ["all-all"]
-  egress_cidr_blocks = var.public_cidr_blocks
+  # Egress rules (dual-stack: one rule per IPv4 CIDR and one per IPv6 CIDR)
+  egress_rules            = ["all-all"]
+  egress_cidr_blocks      = var.public_cidr_blocks
+  egress_ipv6_cidr_blocks = var.ipv6_cidr_blocks
 
   # Additional egress to specific CIDR
   egress_with_cidr_blocks = [
@@ -102,7 +103,8 @@ module "advanced_security_group" {
     }
   ]
 
-  tags = var.advanced_tags
+  tags_common = var.tags_common
+  tags        = var.advanced_tags
 }
 
 # =============================================================================
@@ -125,5 +127,6 @@ module "minimal_security_group" {
   egress_rules       = ["all-all"]
   egress_cidr_blocks = var.public_cidr_blocks
 
-  tags = var.minimal_tags
+  tags_common = var.tags_common
+  tags        = var.minimal_tags
 }

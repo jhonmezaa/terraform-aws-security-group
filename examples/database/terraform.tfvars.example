@@ -8,12 +8,12 @@
 # The module variables are configured directly in main.tf for demonstration purposes.
 
 # AWS Region (configured in provider block in main.tf)
-# region = "us-east-1"
+# aws_region = "us-east-1"
 
 # Account and Project Names (configured in main.tf)
 # account_name = "prod"
-# project_name_app = "api"
-# project_name_db = "database"
+# app_project_name = "api"
+# db_project_name = "database"
 
 # Database Access CIDR Blocks (configured in main.tf)
 # Replace these with your actual private subnet CIDR blocks

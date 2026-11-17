@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.3.0] - 2026-11-17
+
+### Added
+
+- `tags_common` variable: common tags merged into every resource (`merge(tags_common, tags, { Name, ManagedBy })`)
+- `region` variable (AWS provider v6 per-resource region) for the security group, rules and VPC associations; the region prefix is derived from it when set
+- `timeouts` variable (`create` / `delete`) for the security group, matching the upstream module
+- `vpc_associations` variable and output, backed by `aws_vpc_security_group_vpc_association`, to associate the security group with additional VPCs
+- Validation: `name` cannot start with `sg-` (AWS restriction) and must be at most 255 characters
+- Precondition: `security_group_id` is required when `create_sg = false`
+
+### Fixed
+
+- `ingress_ipv6_cidr_blocks` / `egress_ipv6_cidr_blocks` were declared and documented but ignored: predefined rules are now created for every IPv6 CIDR (`*_rules_ipv6` resources)
+- Predefined rules without any CIDR produced rules with no source that failed at apply time; the plan now fails early with a clear precondition error. When only IPv6 CIDRs are given, no IPv4 rule is planned
+- `ingress_rules.predefined` / `egress_rules.predefined` outputs now include the rules created for additional IPv4 CIDRs and for IPv6 CIDRs
+- Rules created from `*_with_*` inputs now get `Name` and `ManagedBy` tags (previously only `var.tags`)
+- `use_region_prefix` description and README naming section: without the region prefix the name is `{account}-{project}-sg`, not `sg-{account}-{project}`
+- README: `source` uses the GitHub URL with `?ref=`, documents all inputs/outputs (`use_region_prefix` was missing), and the `all-all` port column
+- Example `terraform.tfvars.example` files referenced variable names that do not exist
+
+### Changed
+
+- Removed the unused `aws_caller_identity` and `aws_partition` data sources
+- `examples/advanced` shows dual-stack predefined egress and `tags_common`
+- Normalized line endings of `5-outputs.tf` and `6-variables.tf` to LF
+
+### Upgrade notes
+
+- No resource is recreated. Tag changes are applied in place:
+  - The `Name` and `ManagedBy` tags of the security group and predefined rules now take precedence over `var.tags` (previously a `Name` in `var.tags` overrode the generated one)
+  - Rules from `*_with_*` inputs gain `Name` and `ManagedBy` tags
+- If you set `ingress_ipv6_cidr_blocks` / `egress_ipv6_cidr_blocks` together with predefined rules, the corresponding IPv6 rules will now be created
+
 ## [v1.2.4] - 2026-10-27
 
 ### Changed

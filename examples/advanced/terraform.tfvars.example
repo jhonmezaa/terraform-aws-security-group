@@ -7,33 +7,31 @@
 # Note: This example uses the default VPC which is automatically discovered.
 # The module variables are configured directly in main.tf for demonstration purposes.
 
-# AWS Region (configured in provider block in main.tf)
-# region = "us-east-1"
+# AWS Region
+# aws_region = "us-east-1"
 
-# Advanced Security Group Configuration (configured in main.tf)
-# account_name = "prod"
-# project_name = "microservices"
-# use_name_prefix = true  # Creates name with random suffix
+# Advanced Security Group Configuration
+# advanced_account_name = "prod"
+# advanced_project_name = "microservices"
+# advanced_sg_name      = "advanced-sg"
+# use_name_prefix       = true  # Creates name with random suffix
 
-# Minimal Security Group Configuration (configured in main.tf)
-# account_name = "dev"
-# project_name = "test"
+# Minimal Security Group Configuration
+# minimal_account_name = "dev"
+# minimal_project_name = "test"
 
-# CIDR Blocks for different rule types (configured in main.tf)
+# CIDR Blocks for different rule types
 # Replace these with your actual network configuration:
 #
-# Predefined rules CIDR:
-# ingress_cidr_blocks = ["10.0.0.0/8"]  # Private network range
-#
-# Custom application ports:
-# custom_app_cidr = ["10.0.1.0/24", "10.0.2.0/24"]  # Private subnets
-# monitoring_cidr = ["10.0.0.0/16"]  # VPC CIDR
-#
-# Database access:
-# database_cidr = ["10.0.100.0/24"]  # Database subnet
-#
-# IPv6 support:
-# ipv6_cidr = ["::/0"]  # All IPv6 (adjust for production)
+# vpc_cidr_blocks             = ["10.0.0.0/8"]                  # Predefined ingress rules
+# private_subnet_cidr_blocks  = ["10.0.1.0/24", "10.0.2.0/24"]  # Custom application port
+# monitoring_cidr_blocks      = ["10.0.0.0/16"]                 # Monitoring ports
+# database_subnet_cidr_blocks = ["10.0.100.0/24"]               # MySQL egress
+# ipv6_cidr_blocks            = ["::/0"]                        # IPv6 HTTPS ingress + all-all egress
+# public_cidr_blocks          = ["0.0.0.0/0"]                   # Public HTTPS ingress + all-all egress
+
+# Tags
+# tags_common = { Owner = "platform-team" }
 
 # =============================================================================
 # Usage Instructions

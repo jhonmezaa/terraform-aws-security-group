@@ -7,6 +7,9 @@ Production-ready Terraform module for creating and managing AWS Security Groups 
 - **Predefined Rules**: Built-in rules for common services (HTTP, HTTPS, SSH, databases, etc.)
 - **Input Validation**: Comprehensive variable validations for account/project names and predefined rules
 - **Flexible Rule Types**: Support for CIDR blocks, IPv6, source security groups, self-referencing, and prefix lists
+- **Dual-stack Predefined Rules**: Predefined rules are created for every IPv4 (`*_cidr_blocks`) and IPv6 (`*_ipv6_cidr_blocks`) CIDR
+- **VPC Associations**: Associate the security group with additional VPCs (`vpc_associations`)
+- **Per-resource Region**: Optional `region` argument (AWS provider v6) for every resource
 - **Multiple Naming Options**: Fixed names or name prefixes for resource management
 - **VPC Security Group Rules**: Uses modern `aws_vpc_security_group_*_rule` resources
 - **Regional Support**: Automatic region prefix mapping for 29 AWS regions across all continents
@@ -19,7 +22,7 @@ Production-ready Terraform module for creating and managing AWS Security Groups 
 
 ```hcl
 module "web_sg" {
-  source = "./security-group"
+  source = "git::https://github.com/jhonmezaa/terraform-aws-security-group.git//security-group?ref=v1.3.0"
 
   account_name = "dev"
   project_name = "webapp"
@@ -45,7 +48,7 @@ module "web_sg" {
 
 ```hcl
 module "db_sg" {
-  source = "./security-group"
+  source = "git::https://github.com/jhonmezaa/terraform-aws-security-group.git//security-group?ref=v1.3.0"
 
   account_name = "prod"
   project_name = "database"
@@ -80,7 +83,7 @@ module "db_sg" {
 
 ```hcl
 module "advanced_sg" {
-  source = "./security-group"
+  source = "git::https://github.com/jhonmezaa/terraform-aws-security-group.git//security-group?ref=v1.3.0"
 
   account_name    = "prod"
   project_name    = "microservices"
@@ -139,8 +142,10 @@ The module includes predefined rules for common services:
 | `dns-udp`               | 53        | UDP      | DNS                |
 | `dns-tcp`               | 53        | TCP      | DNS                |
 | `nfs-tcp`               | 2049      | TCP      | NFS                |
-| `all-all`               | 0         | -1       | All protocols      |
-| `all-icmp`              | -1        | ICMP     | All ICMP           |
+| `all-all`               | all       | -1 (all) | All protocols      |
+| `all-icmp`              | all types | ICMP     | All ICMP           |
+
+Predefined rules need at least one CIDR in `ingress_cidr_blocks`/`ingress_ipv6_cidr_blocks` (or the `egress_*` equivalents); otherwise the plan fails with a precondition error. One rule is created per rule name and CIDR.
 
 ## Inputs
 
@@ -152,6 +157,9 @@ The module includes predefined rules for common services:
 | `create_sg`         | Whether to create security group            | `bool`   | `true`  | no       |
 | `security_group_id` | ID of existing security group               | `string` | `null`  | no       |
 | `vpc_id`            | VPC ID where security group will be created | `string` | `null`  | no       |
+| `region`            | Region for all resources (defaults to the provider region; also used for the region prefix) | `string` | `null` | no |
+| `timeouts`          | Create/delete timeouts for the security group (`object({ create = optional(string), delete = optional(string) })`) | `object` | `null` | no |
+| `vpc_associations`  | Additional VPCs to associate the security group with (`map(object({ vpc_id = string }))`) | `map(object)` | `{}` | no |
 
 ### Naming
 
@@ -159,11 +167,13 @@ The module includes predefined rules for common services:
 | ----------------- | ---------------------------------------------------------------------------------- | ------------- | ------------------------ | -------- |
 | `account_name`    | Account name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                        | yes      |
 | `project_name`    | Project name for resource naming (1-32 chars, lowercase letters, numbers, hyphens) | `string`      | -                        | yes      |
-| `name`            | Security group name                                                                | `string`      | `null`                   | no       |
+| `name`            | Security group name (cannot start with `sg-`, max 255 chars)                       | `string`      | `null`                   | no       |
 | `use_name_prefix` | Use name_prefix instead of name                                                    | `bool`        | `false`                  | no       |
 | `region_prefix`   | Region prefix for naming                                                           | `string`      | `null`                   | no       |
+| `use_region_prefix` | Include the region prefix in generated names                                     | `bool`        | `true`                   | no       |
 | `description`     | Security group description                                                         | `string`      | `"Managed by Terraform"` | no       |
-| `tags`            | Additional tags                                                                    | `map(string)` | `{}`                     | no       |
+| `tags_common`     | Common tags for every resource (merged first)                                      | `map(string)` | `{}`                     | no       |
+| `tags`            | Additional tags for the security group and its rules                               | `map(string)` | `{}`                     | no       |
 
 ### Ingress Rules
 
@@ -209,6 +219,7 @@ The module includes predefined rules for common services:
 | `security_group_description` | The description of the security group |
 | `ingress_rules`              | Summary of ingress rules created      |
 | `egress_rules`               | Summary of egress rules created       |
+| `vpc_associations`           | Additional VPC associations (VPC ID and state) |
 
 ## Requirements
 
@@ -291,13 +302,21 @@ By default, security groups are named:
 
 Example: `ause1-sg-prod-webapp`
 
-When `use_name_prefix = true`, a name prefix is used instead:
+With `use_region_prefix = false` the type moves to the end, because AWS does not allow security group names starting with `sg-`:
 
 ```
-{region_prefix}-sg-{account_name}-{project_name}-
+{account_name}-{project_name}-sg
 ```
+
+Example: `prod-webapp-sg`
+
+When `use_name_prefix = true`, the generated name (or `name`) followed by `-` is used as `name_prefix` and AWS appends a random suffix.
 
 You can also provide a custom name via the `name` variable.
+
+## Tags
+
+Every resource gets `merge(tags_common, tags, { Name = <name>, ManagedBy = "Terraform" })`. Rules are tagged with `Name = <security group name>-<rule key>`.
 
 ## License
 

@@ -8,7 +8,7 @@
 # The module variables are configured directly in main.tf for demonstration purposes.
 
 # AWS Region (configured in provider block in main.tf)
-# region = "us-east-1"
+# aws_region = "us-east-1"
 
 # Account and Project Names (configured in main.tf)
 # account_name = "dev"
